@@ -41,6 +41,9 @@ public class SkipCmd extends MusicCommand
     public void doCommand(CommandEvent event) 
     {
         AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
+        event.reply(event.getClient().getSuccess()+" Skipped **"+handler.getPlayer().getPlayingTrack().getInfo().title+"**");
+        handler.getPlayer().stopTrack();
+        /*
         if(event.getAuthor().getIdLong()==handler.getRequester())
         {
             event.reply(event.getClient().getSuccess()+" Skipped **"+handler.getPlayer().getPlayingTrack().getInfo().title+"**");
@@ -71,6 +74,7 @@ public class SkipCmd extends MusicCommand
             }
             event.reply(msg);
         }
+        */
     }
     
 }
