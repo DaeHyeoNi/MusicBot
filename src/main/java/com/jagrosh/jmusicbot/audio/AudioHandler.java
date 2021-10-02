@@ -100,7 +100,21 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler
         audioPlayer.stopTrack();
         //current = null;
     }
-    
+
+    public void seek(long position) {
+        forPlayingTrack(track -> {
+          track.setPosition(position);
+        });
+    }
+
+    private void forPlayingTrack(TrackOperation operation) {
+        AudioTrack track = audioPlayer.getPlayingTrack();
+
+        if (track != null) {
+          operation.execute(track);
+        }
+    }
+
     public boolean isMusicPlaying(JDA jda)
     {
         return guild(jda).getSelfMember().getVoiceState().inVoiceChannel() && audioPlayer.getPlayingTrack()!=null;
@@ -193,6 +207,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler
         manager.getBot().getNowplayingHandler().onTrackUpdate(guildId, track, this);
     }
 
+    
     
     // Formatting
     public Message getNowPlaying(JDA jda)
@@ -318,5 +333,9 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler
     private Guild guild(JDA jda)
     {
         return jda.getGuildById(guildId);
+    }
+
+    private interface TrackOperation {
+        void execute(AudioTrack track);
     }
 }
